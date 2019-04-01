@@ -16,6 +16,14 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  Future<void> _signInWithGoogle() async {
+    try {
+      auth.signInWithGoogle();
+    } catch (e) {
+      print("_signInAnonymously: There was an error: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +56,7 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.black87,
             color: Colors.white,
             assetName: "images/google-logo.png",
-            onPressed: () {},
+            onPressed: _signInWithGoogle,
           ),
           SizedBox(
             height: 8,
