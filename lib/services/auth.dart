@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class User {
   final String uid;
@@ -10,14 +11,11 @@ class User {
 
 abstract class BaseAuth {
   Stream<User> get onAuthStateChanged;
-
   Future<User> currentUser();
-
   Future<User> singInAnonymously();
-
   Future<void> signOut();
-
   Future<User> signInWithGoogle();
+  Future<User> signInWithFacebook();
 }
 
 class Auth implements BaseAuth {
@@ -53,6 +51,9 @@ class Auth implements BaseAuth {
   Future<void> signOut() async {
     final googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
+
+    final facebookLogin = FacebookLogin();
+    await facebookLogin.logOut();
     return await _firebaseAuth.signOut();
   }
 
@@ -72,6 +73,18 @@ class Auth implements BaseAuth {
       throw StateError("Google sign in failed");
     } else {
       throw StateError("Google sign in aborted");
+    }
+  }
+
+  @override
+  Future<User> signInWithFacebook() async{
+    final facebookLogin = FacebookLogin();
+    FacebookLoginResult result = await facebookLogin.logInWithReadPermissions(['public_profile']);
+    if(result.accessToken != null){
+      FirebaseUser user = await _firebaseAuth.signInWithFacebook(accessToken: result.accessToken.token);
+      return _userFromFirebase(user);
+    }else{
+      throw StateError("Facebook access token error");
     }
   }
 
