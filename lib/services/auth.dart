@@ -51,6 +51,8 @@ class Auth implements BaseAuth {
 
   @override
   Future<void> signOut() async {
+    final googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
     return await _firebaseAuth.signOut();
   }
 
