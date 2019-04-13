@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_page.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/sign_in_button.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/social_sign_in_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
@@ -10,7 +11,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInAnonymously() async {
     try {
-        auth.singInAnonymously();
+      auth.singInAnonymously();
     } catch (e) {
       print("_signInAnonymously: There was an error: $e");
     }
@@ -31,6 +32,17 @@ class SignInPage extends StatelessWidget {
       print("_signInAnonymously: There was an error: $e");
     }
   }
+
+  void _signInWithEmail(BuildContext context) {
+    //TODO showing email and password page
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => EmailSignInPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +50,12 @@ class SignInPage extends StatelessWidget {
         title: Text("Flutter Time Tracker"),
         elevation: 2,
       ),
-      body: _buildContent(),
+      body: _buildContent(context),
       backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -84,7 +96,7 @@ class SignInPage extends StatelessWidget {
             text: "Sign in with email",
             textColor: Colors.white,
             color: Colors.teal[700],
-            onPressed: () {},
+            onPressed: () => _signInWithEmail(context),
           ),
           SizedBox(
             height: 8,
