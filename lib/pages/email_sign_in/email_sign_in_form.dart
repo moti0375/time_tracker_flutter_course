@@ -46,6 +46,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   void _emailEditComplete() {
     print("Email edit completed");
+    setState(() {
+      _submitted = true;
+    });
     FocusScope.of(context).requestFocus(_passwordFocusNode);
   }
 
