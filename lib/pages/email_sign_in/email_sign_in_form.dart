@@ -22,7 +22,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   EmailSignInFromType _formType = EmailSignInFromType.signIn;
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-
   void _submit() async {
     print("email: ${_emailController.text}, "
         "password: ${_passwordController.text}");
@@ -48,6 +47,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     _submit();
   }
 
+  void _updateForm() {setState((){});}
+
   void _toggleFormType() {
     setState(() {
       _formType = _formType == EmailSignInFromType.signIn
@@ -59,6 +60,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   List<Widget> _buildChildren() {
+    bool submitEnabled = _email.isNotEmpty && _password.isNotEmpty;
+
+
     final String _primaryText = _formType == EmailSignInFromType.signIn
         ? 'Sign In'
         : 'Create an account';
@@ -72,7 +76,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       SizedBox(height: 8),
       FormSubmitButton(
         text: _primaryText,
-        onPressed: _submit,
+        onPressed: submitEnabled ? _submit : null,
       ),
       SizedBox(height: 8),
       FlatButton(
@@ -92,6 +96,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ),
       autocorrect: false,
       onEditingComplete: _passwordEditCompleted,
+      onChanged: (password) => _updateForm(),
     );
   }
 
@@ -106,6 +111,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onEditingComplete: _emailEditComplete,
+      onChanged: (email) => _updateForm(),
     );
   }
 
