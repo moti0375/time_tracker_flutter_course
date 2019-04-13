@@ -18,9 +18,10 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   final TextEditingController _passwordController = TextEditingController();
 
   String get _email => _emailController.text;
-
   String get _password => _passwordController.text;
   EmailSignInFromType _formType = EmailSignInFromType.signIn;
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   void _submit() async {
     print("email: ${_emailController.text}, "
@@ -36,6 +37,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     } catch (e) {
       print("There was an error: ${e.toString()}");
     }
+  }
+
+  void _emailEditComplete() {
+    print("Email edit completed");
+    FocusScope.of(context).requestFocus(_passwordFocusNode);
+  }
+
+  void _passwordEditCompleted() {
+    _submit();
   }
 
   void _toggleFormType() {
@@ -56,21 +66,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         ? 'Need an account? Register'
         : 'Have an account? Sign in';
     return [
-      TextField(
-        controller: _emailController,
-        decoration: InputDecoration(
-          labelText: "Email",
-          hintText: "Test@Test.com",
-        ),
-      ),
+      _buildEmailInputField(),
       SizedBox(height: 8),
-      TextField(
-        controller: _passwordController,
-        obscureText: true,
-        decoration: InputDecoration(
-          labelText: "Password",
-        ),
-      ),
+      _buildPasswordInputField(),
       SizedBox(height: 8),
       FormSubmitButton(
         text: _primaryText,
@@ -84,6 +82,33 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     ];
   }
 
+  TextField _buildPasswordInputField() {
+    return TextField(
+      focusNode: _passwordFocusNode,
+      controller: _passwordController,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: "Password",
+      ),
+      autocorrect: false,
+      onEditingComplete: _passwordEditCompleted,
+    );
+  }
+
+  TextField _buildEmailInputField() {
+    return TextField(
+      focusNode: _emailFocusNode,
+      controller: _emailController,
+      decoration: InputDecoration(
+        labelText: "Email",
+        hintText: "Test@Test.com",
+      ),
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
+      onEditingComplete: _emailEditComplete,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -95,4 +120,5 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ),
     );
   }
+
 }
