@@ -23,7 +23,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   EmailSignInFromType _formType = EmailSignInFromType.signIn;
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+  bool _submitted = false;
+
   void _submit() async {
+    setState(() {
+      _submitted = true;
+    });
     print("email: ${_emailController.text}, "
         "password: ${_passwordController.text}");
 
@@ -48,10 +53,13 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     _submit();
   }
 
-  void _updateForm() {setState((){});}
+  void _updateForm() {setState((){
+    _submitted = false;
+  });}
 
   void _toggleFormType() {
     setState(() {
+      _submitted = false;
       _formType = _formType == EmailSignInFromType.signIn
           ? EmailSignInFromType.register
           : EmailSignInFromType.signIn;
@@ -89,14 +97,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   TextField _buildPasswordInputField() {
-    bool _passwordValid = widget.passwordValidator.isValid(_password);
+    bool _showErrorText = _submitted && !widget.passwordValidator.isValid(_password);
     return TextField(
       focusNode: _passwordFocusNode,
       controller: _passwordController,
       obscureText: true,
       decoration: InputDecoration(
         labelText: "Password",
-        errorText: _passwordValid ? null : widget.invalidPasswordText
+        errorText: _showErrorText ?  widget.invalidPasswordText : null,
       ),
       autocorrect: false,
       onEditingComplete: _passwordEditCompleted,
@@ -105,14 +113,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   TextField _buildEmailInputField() {
-    bool emailValid = widget.emailValidator.isValid(_email);
+    bool showErrorText = _submitted && !widget.emailValidator.isValid(_email);
     return TextField(
       focusNode: _emailFocusNode,
       controller: _emailController,
       decoration: InputDecoration(
         labelText: "Email",
         hintText: "Test@Test.com",
-        errorText: emailValid ? null : widget.invalidEmailText
+        errorText: showErrorText ? widget.invalidEmailText : null,
       ),
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
