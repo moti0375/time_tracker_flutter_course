@@ -16,6 +16,8 @@ abstract class BaseAuth {
   Future<void> signOut();
   Future<User> signInWithGoogle();
   Future<User> signInWithFacebook();
+  Future<User> signInWithEmailAndPassword(String email, String password);
+  Future<User> createAccount(String email, String password);
 }
 
 class Auth implements BaseAuth {
@@ -86,6 +88,19 @@ class Auth implements BaseAuth {
     }else{
       throw StateError("Facebook access token error");
     }
+  }
+
+
+  @override
+  Future<User> createAccount(String email, String password) async {
+    FirebaseUser firebaseUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+    return _userFromFirebase(firebaseUser);
+  }
+
+  @override
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
+    FirebaseUser firebaseUser = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+    return _userFromFirebase(firebaseUser);
   }
 
 }
