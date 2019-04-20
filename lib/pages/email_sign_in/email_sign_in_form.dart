@@ -49,6 +49,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       print("There was an error: ${e.toString()}");
       showDialog(
           context: context,
+          barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
               title: Text("Sign in failed"),
