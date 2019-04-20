@@ -8,7 +8,7 @@ class Application extends StatelessWidget {
     return MaterialApp(
       title: "TimeTracker",
       theme: ThemeData(
-        primarySwatch: Colors.indigo
+        primarySwatch: Theme.of(context).primaryColor
       ),
       home: LandingPage(auth: Auth(),)
     );

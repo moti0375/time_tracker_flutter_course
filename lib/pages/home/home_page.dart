@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class HomePage extends StatelessWidget {
@@ -17,25 +20,32 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home Page"),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              "Logout",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              _showSignOutDialog(context);
-            },
-          )
-        ],
-      ),
+
+    PlatformToolbar appBar = PlatformToolbar(
+      title: Text("Home Page"),
+      actions: _buildToolbarActions(context),
     );
+
+    return Scaffold(
+      appBar:appBar.build(context),
+    );
+  }
+
+  List<Widget> _buildToolbarActions(BuildContext context) {
+    return <Widget>[
+      FlatButton(
+        child: Text(
+          "Logout",
+          style: TextStyle(
+            fontSize: 18,
+            color: Platform.isIOS ? Colors.black : Theme.of(context).primaryTextTheme.title.color,
+          ),
+        ),
+        onPressed: () {
+          _showSignOutDialog(context);
+        },
+      )
+    ];
   }
 
   Future<void> _showSignOutDialog(BuildContext context) async {
