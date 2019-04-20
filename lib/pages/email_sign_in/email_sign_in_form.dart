@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/utils/validators.dart';
 
@@ -51,17 +54,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           context: context,
           barrierDismissible: false,
           builder: (context) {
-            return AlertDialog(
-              title: Text("Sign in failed"),
-              content: Text(e.toString()),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
+            return PlatformAlertDialog(
+              title: "Sign in failed",
+              content: e.toString(),
+              defaultActionText: "OK",
+              actions: _buildActions(context),
             );
           });
     } finally {
@@ -178,5 +175,13 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         children: _buildChildren(),
       ),
     );
+  }
+
+  List<Widget> _buildActions(BuildContext context) {
+    return [
+      PlatformAlertDialogAction(child: Text("OK"), onPressed: (){
+        Navigator.of(context).pop();
+      })
+    ];
   }
 }
