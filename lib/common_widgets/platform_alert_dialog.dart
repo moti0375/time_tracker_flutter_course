@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:time_tracker_flutter_course/common_widgets/platform_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +20,17 @@ class PlatformAlertDialog extends PlatformWidget {
         assert(defaultActionText != null),
         assert(actions != null);
 
-  Future<bool> show<bool>(BuildContext context) async {
-    return await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => this,
-    );
+  Future<bool> show(BuildContext context) async {
+    return Platform.isIOS
+        ? await showCupertinoDialog<bool>(
+            context: context,
+            builder: (context) => this,
+          )
+        : await showDialog<bool>(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => this,
+          );
   }
 
   @override
