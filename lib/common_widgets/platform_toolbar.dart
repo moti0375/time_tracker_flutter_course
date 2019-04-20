@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_widget.dart';
 
 class PlatformToolbar extends PlatformWidget {
@@ -10,7 +11,7 @@ class PlatformToolbar extends PlatformWidget {
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
-    Widget trailing = actions[0];
+    Widget trailing = actions.isNotEmpty ? actions[0] : null;
     print("Trailing: $trailing");
     return CupertinoNavigationBar(
       middle: title,

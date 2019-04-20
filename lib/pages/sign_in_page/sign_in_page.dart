@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_page.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/sign_in_button.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/social_sign_in_button.dart';
@@ -46,10 +47,10 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: PlatformToolbar(
         title: Text("Flutter Time Tracker"),
-        elevation: 2,
-      ),
+        actions: <Widget>[],
+      ).build(context),
       body: _buildContent(context),
       backgroundColor: Colors.grey[200],
     );
