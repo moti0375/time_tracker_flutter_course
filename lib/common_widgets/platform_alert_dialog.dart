@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformAlertDialog extends PlatformWidget {
-
   final String title;
   final String content;
   final String defaultActionText;
@@ -11,11 +10,21 @@ class PlatformAlertDialog extends PlatformWidget {
 
   PlatformAlertDialog(
       {@required this.title,
-        @required this.content,
-        @required this.defaultActionText,
-      @required this.actions}) : assert(title != null),
+      @required this.content,
+      @required this.defaultActionText,
+      @required this.actions})
+      : assert(title != null),
         assert(content != null),
-        assert(defaultActionText != null), assert(actions != null);
+        assert(defaultActionText != null),
+        assert(actions != null);
+
+  Future<bool> show<bool>(BuildContext context) async {
+    return await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => this,
+    );
+  }
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
@@ -35,11 +44,11 @@ class PlatformAlertDialog extends PlatformWidget {
     );
   }
 
-  List<Widget>_buildActions(BuildContext context, List<Widget> actions) {
+  List<Widget> _buildActions(BuildContext context, List<Widget> actions) {
     return [
       PlatformAlertDialogAction(
         child: Text(defaultActionText),
-        onPressed: (){
+        onPressed: () {
           Navigator.of(context).pop();
         },
       )
@@ -47,13 +56,14 @@ class PlatformAlertDialog extends PlatformWidget {
   }
 }
 
-class PlatformAlertDialogAction extends PlatformWidget{
-
+class PlatformAlertDialogAction extends PlatformWidget {
   final Widget child;
   final VoidCallback onPressed;
 
   PlatformAlertDialogAction({@required this.child, @required this.onPressed})
-      : assert(child != null), assert(onPressed != null);
+      : assert(child != null),
+        assert(onPressed != null);
+
   @override
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoDialogAction(
@@ -70,5 +80,4 @@ class PlatformAlertDialogAction extends PlatformWidget{
       onPressed: onPressed,
     );
   }
-
 }

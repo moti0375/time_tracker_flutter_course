@@ -50,17 +50,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       Navigator.of(context).pop();
     } catch (e) {
       print("There was an error: ${e.toString()}");
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return PlatformAlertDialog(
-              title: "Sign in failed",
-              content: e.toString(),
-              defaultActionText: "OK",
-              actions: _buildActions(context),
-            );
-          });
+      PlatformAlertDialog platformAlertDialog = PlatformAlertDialog(title: "Sign in failed", content: e.toString(), defaultActionText: 'OK', actions: _buildActions(context));
+      platformAlertDialog.show(context).then((selection){
+
+      });
+
     } finally {
       setState(() {
         _loggingIn = false;
