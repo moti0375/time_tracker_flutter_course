@@ -47,6 +47,22 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       Navigator.of(context).pop();
     } catch (e) {
       print("There was an error: ${e.toString()}");
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Sign in failed"),
+              content: Text(e.toString()),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
     } finally {
       setState(() {
         _loggingIn = false;
@@ -60,7 +76,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 //      _submitted = true;
 //    });
 
-    final newFocus = widget.emailValidator.isValid(_email) ? _passwordFocusNode : _emailFocusNode;
+    final newFocus = widget.emailValidator.isValid(_email)
+        ? _passwordFocusNode
+        : _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
