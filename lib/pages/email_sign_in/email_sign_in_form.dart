@@ -38,7 +38,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         "password: ${_passwordController.text}");
 
     try {
-    //  await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
+      await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
       if (_formType == EmailSignInFromType.signIn) {
         await widget.auth.signInWithEmailAndPassword(_email, _password);
       } else {
@@ -103,6 +103,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       FormSubmitButton(
         text: _primaryText,
         onPressed: _loggingIn ? null : submitEnabled ? _submit : null,
+        isLoading: _loggingIn,
       ),
       SizedBox(height: 8),
       FlatButton(

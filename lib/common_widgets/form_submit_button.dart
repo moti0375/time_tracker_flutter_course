@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/common_widgets/custom_raised_button.dart';
 
 class FormSubmitButton extends CustomRaisedButton {
-  FormSubmitButton({@required String text, @required VoidCallback onPressed})
+  FormSubmitButton({@required String text, @required VoidCallback onPressed, bool isLoading})
       : super(
           child: Text(
             text,
@@ -14,5 +14,6 @@ class FormSubmitButton extends CustomRaisedButton {
           onPressed: onPressed,
           height: 44,
           color: Colors.indigo,
+          isLoading: isLoading,
         );
 }
