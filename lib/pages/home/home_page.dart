@@ -3,15 +3,14 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
+import 'package:time_tracker_flutter_course/services/auth_provider.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({@required this.auth});
 
-  final BaseAuth auth;
 
-  _signOut() async {
+  _signOut(BuildContext context) async {
     try {
-      await auth.signOut();
+      await AuthProvider.of(context).signOut();
     } catch (e) {
       print("_signInAnonymously: There was an error: $e");
     }
@@ -48,7 +47,7 @@ class HomePage extends StatelessWidget {
       actions: _buildActions(context),
     ).show(context).then((selection) {
       if (selection) {
-        _signOut();
+        _signOut(context);
       }
     });
   }
