@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_page.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/sign_in_button.dart';
@@ -11,7 +12,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      AuthProvider.of(context).singInAnonymously();
+      Provider.of<BaseAuth>(context).singInAnonymously();
     } catch (e) {
       print("_signInAnonymously: There was an error: $e");
     }
@@ -19,7 +20,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      AuthProvider.of(context).signInWithGoogle();
+      Provider.of<BaseAuth>(context).signInWithGoogle();
     } catch (e) {
       print("_signInAnonymously: There was an error: $e");
     }
@@ -27,7 +28,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      AuthProvider.of(context).signInWithFacebook();
+      Provider.of<BaseAuth>(context).signInWithFacebook();
     } catch (e) {
       print("_signInAnonymously: There was an error: $e");
     }
