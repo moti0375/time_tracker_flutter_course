@@ -28,8 +28,8 @@ class EmailSignInBloc {
     );
   }
 
-  void updateEmail(String email) => updateWith(email: email);
-  void updatePassword(String password) => updateWith(password: password);
+  void updateEmail(String email) => updateWith(email: email.trim());
+  void updatePassword(String password) => updateWith(password: password.trim());
 
   void updateWith({
     String email,
@@ -54,7 +54,7 @@ class EmailSignInBloc {
     updateWith(loading: true, submitted: true);
 
     print("email: ${_currentModel.email}, "
-        "password: ${_currentModel.password}");
+        "password: ${_currentModel.password.trim()}");
 
     try {
       await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
@@ -68,7 +68,7 @@ class EmailSignInBloc {
       print("There was an error: ${e.toString()}");
       rethrow;
     } finally {
-      updateWith(loading: true);
+      updateWith(loading: false);
     }
   }
 

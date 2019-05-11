@@ -10,6 +10,12 @@ import 'package:time_tracker_flutter_course/services/auth_provider.dart';
 import 'package:time_tracker_flutter_course/utils/validators.dart';
 
 
+/*
+   This widget is not in use anymore!
+   It used to be used before refactoring the page to work with BLoC architecture
+
+ * */
+
 class EmailSignInFormStful extends StatefulWidget with EmailAndPasswordValidators {
 
 
