@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
   List<Widget> _buildToolbarActions(BuildContext context) {
     return <Widget>[
       PlatformFlatButton(
-        title: Text("Logout"),
+        title: Text("Signout"),
         onPressed: () {
           _showSignOutDialog(context);
         },

@@ -66,10 +66,8 @@ class Auth implements BaseAuth {
     if (account != null) {
       GoogleSignInAuthentication authentication = await account.authentication;
       if(authentication.idToken != null && authentication.accessToken != null){
-        FirebaseUser user = await _firebaseAuth.signInWithGoogle(
-          idToken: authentication.idToken,
-          accessToken: authentication.accessToken,
-        );
+        FirebaseUser user = await _firebaseAuth.signInWithCredential(
+          GoogleAuthProvider.getCredential(idToken: authentication.idToken, accessToken: authentication.accessToken));
         return _userFromFirebase(user);
       }
       throw StateError("Google sign in failed");
@@ -83,7 +81,7 @@ class Auth implements BaseAuth {
     final facebookLogin = FacebookLogin();
     FacebookLoginResult result = await facebookLogin.logInWithReadPermissions(['public_profile']);
     if(result.accessToken != null){
-      FirebaseUser user = await _firebaseAuth.signInWithFacebook(accessToken: result.accessToken.token);
+      FirebaseUser user = await _firebaseAuth.signInWithCredential(FacebookAuthProvider.getCredential(accessToken: result.accessToken.token));
       return _userFromFirebase(user);
     }else{
       throw StateError("Facebook access token error");
