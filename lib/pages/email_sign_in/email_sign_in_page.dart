@@ -18,7 +18,7 @@ class EmailSignInPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Card(
-            child: _createPage(context),
+            child: _createEmailSignForm(context),
           ),
         ),
       ),
@@ -26,7 +26,7 @@ class EmailSignInPage extends StatelessWidget {
     );
   }
 
-  Widget _createPage(BuildContext context) {
+  Widget _createEmailSignForm(BuildContext context) {
     final BaseAuth auth = Provider.of<BaseAuth>(context);
     return StatefulProvider<EmailSignInBloc>(
       valueBuilder: (context) => EmailSignInBloc(auth: auth),
