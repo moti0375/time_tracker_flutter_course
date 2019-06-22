@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_model.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sing_in_bloc.dart';
 
@@ -32,10 +33,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       Navigator.of(context).pop(); //This will close the keyboard
     } on PlatformException catch (e) {
       print("There was an error: ${e.toString()}");
-      PlatformAlertDialog platformAlertDialog = PlatformAlertDialog(
+      PlatformExceptionAlertDialog platformAlertDialog = PlatformExceptionAlertDialog(
           title: "Sign in failed",
-          content: e.message,
-          defaultActionText: 'OK',
+          exception: e,
           actions: _buildActions());
       platformAlertDialog.show(context).then((selection) {});
     }

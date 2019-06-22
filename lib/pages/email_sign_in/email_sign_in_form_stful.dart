@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_model.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/auth_provider.dart';
 import 'package:time_tracker_flutter_course/utils/validators.dart';
-
 
 /*
    This widget is not in use anymore!
@@ -16,9 +17,8 @@ import 'package:time_tracker_flutter_course/utils/validators.dart';
 
  * */
 
-class EmailSignInFormStful extends StatefulWidget with EmailAndPasswordValidators {
-
-
+class EmailSignInFormStful extends StatefulWidget
+    with EmailAndPasswordValidators {
   @override
   _EmailSignInFormStfulState createState() => _EmailSignInFormStfulState();
 }
@@ -55,13 +55,15 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
         await auth.createAccount(_email, _password);
       }
       Navigator.of(context).pop();
-    } catch (e) {
+    } on PlatformException catch (e) {
       print("There was an error: ${e.toString()}");
-      PlatformAlertDialog platformAlertDialog = PlatformAlertDialog(title: "Sign in failed", content: e.toString(), defaultActionText: 'OK', actions: _buildActions(context));
-      platformAlertDialog.show(context).then((selection){
-
-      });
-
+      PlatformExceptionAlertDialog platformAlertDialog =
+          PlatformExceptionAlertDialog(
+        title: "Sign in failed",
+        exception: e,
+        actions: _buildActions(context),
+      );
+      platformAlertDialog.show(context).then((selection) {});
     } finally {
       setState(() {
         _loggingIn = false;
@@ -180,9 +182,11 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
 
   List<Widget> _buildActions(BuildContext context) {
     return [
-      PlatformAlertDialogAction(child: Text("OK"), onPressed: (){
-        Navigator.of(context).pop();
-      })
+      PlatformAlertDialogAction(
+          child: Text("OK"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          })
     ];
   }
 }
