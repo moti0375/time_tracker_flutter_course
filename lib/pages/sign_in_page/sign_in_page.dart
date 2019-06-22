@@ -4,11 +4,16 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_exception_al
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_page.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/sign_in_button.dart';
+import 'package:time_tracker_flutter_course/pages/sign_in_page/sing_in_bloc.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/social_sign_in_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:flutter/services.dart';
 
 class SignInPage extends StatelessWidget {
+
+  SignInPage({@required this.bloc});
+  final bloc;
+
 
   void _showErrorMessage(BuildContext context, PlatformException exception){
     PlatformExceptionAlertDialog platformAlertDialog = PlatformExceptionAlertDialog(
@@ -61,19 +66,25 @@ class SignInPage extends StatelessWidget {
         title: Text("Flutter Time Tracker"),
         actions: <Widget>[],
       ).build(context),
-      body: _buildContent(context),
+      body: StreamBuilder<bool>(
+        stream: bloc.isLoadingStream,
+        initialData: false,
+        builder: (context, snapshot) {
+          return _buildContent(context, snapshot.data);
+        }
+      ),
       backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context, bool isLoading) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
+          isLoading ? CircularProgressIndicator() : Text(
             "Sign in",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
