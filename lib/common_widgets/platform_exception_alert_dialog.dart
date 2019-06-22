@@ -4,10 +4,26 @@ import 'package:meta/meta.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
 
 class PlatformExceptionAlertDialog extends PlatformAlertDialog {
+
+  static const _defaultError = "There was an error\nPlease try again later";
+
   PlatformExceptionAlertDialog({
     @required String title,
     @required PlatformException exception,
     @required List<Widget> actions,
-  }) : super(title: title, content: exception.message, defaultActionText: "OK", actions: actions);
+  }) : super(title: title, content: _message(exception), defaultActionText: "OK", actions: actions);
 
+  static String _message(PlatformException exception){
+    print("_message: Error code: ${exception.code}");
+    return _errors[exception.code] ?? _defaultError;
+  }
+
+  static Map<String, String> _errors = {
+//  "ERROR_WEAK_PASSWORD",
+  "ERROR_INVALID_EMAIL": "Invalid email or password",
+  "ERROR_EMAIL_ALREADY_IN_USE": "This email already taken\n",
+  "ERROR_INVALID_EMAIL": "Invalid email",
+  "ERROR_WRONG_PASSWORD": "Invalid email or password",
+  "ERROR_USER_NOT_FOUND": "No account was for this email"
+  };
 }
