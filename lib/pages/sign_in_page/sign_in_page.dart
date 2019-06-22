@@ -23,37 +23,28 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      bloc.setIsLoading(true);
-      await Provider.of<BaseAuth>(context).singInAnonymously();
+      await bloc.signInAnonymously();
     } on PlatformException catch (e) {
       print("_signInAnonymously: There was an error: $e");
       _showErrorMessage(context, e);
-    } finally {
-      bloc.setIsLoading(false);
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
-    bloc.setIsLoading(true);
     try {
-      await Provider.of<BaseAuth>(context).signInWithGoogle();
+      await bloc.singInWithGoogle();
     } on PlatformException catch (e) {
       print("_signInWithGoogle: There was an error: $e");
       _showErrorMessage(context, e);
-    } finally{
-      bloc.setIsLoading(false);
     }
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      bloc.setIsLoading(true);
-      await Provider.of<BaseAuth>(context).signInWithFacebook();
+      await bloc.signInWithFacebook();
     } on PlatformException catch (e) {
       print("_signInAnonymously: There was an error: $e");
       _showErrorMessage(context, e);
-    } finally {
-      bloc.setIsLoading(false);
     }
   }
 
