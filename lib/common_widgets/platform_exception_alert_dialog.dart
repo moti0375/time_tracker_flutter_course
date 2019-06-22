@@ -24,6 +24,9 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
   "ERROR_EMAIL_ALREADY_IN_USE": "This email already taken\n",
   "ERROR_INVALID_EMAIL": "Invalid email",
   "ERROR_WRONG_PASSWORD": "Invalid email or password",
-  "ERROR_USER_NOT_FOUND": "No account was for this email"
+  "ERROR_USER_NOT_FOUND": "No account was for this email",
+  "GOOGLE_SIGNIN_ABORTED": "Google sign in aborted",
+  "MISSING_GOOGLE_AUTH_TOKEN": "Failed to sign in with Google",
+  "FACEBOOK_TOKEN_ERROR": "Facebook access token error"
   };
 }

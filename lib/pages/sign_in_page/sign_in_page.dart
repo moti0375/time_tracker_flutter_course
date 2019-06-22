@@ -1,41 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_page.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/sign_in_button.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/social_sign_in_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
-import 'package:time_tracker_flutter_course/services/auth_provider.dart';
+import 'package:flutter/services.dart';
 
 class SignInPage extends StatelessWidget {
 
+  void _showErrorMessage(BuildContext context, PlatformException exception){
+    PlatformExceptionAlertDialog platformAlertDialog = PlatformExceptionAlertDialog(
+        title: "Sign in failed",
+        exception: exception,
+        actions: []);
+    platformAlertDialog.show(context).then((selection) {});
+  }
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      Provider.of<BaseAuth>(context).singInAnonymously();
-    } catch (e) {
+      await Provider.of<BaseAuth>(context).singInAnonymously();
+    } on PlatformException catch (e) {
       print("_signInAnonymously: There was an error: $e");
+      _showErrorMessage(context, e);
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      Provider.of<BaseAuth>(context).signInWithGoogle();
-    } catch (e) {
-      print("_signInAnonymously: There was an error: $e");
+      await Provider.of<BaseAuth>(context).signInWithGoogle();
+    } on PlatformException catch (e) {
+      print("_signInWithGoogle: There was an error: $e");
+      _showErrorMessage(context, e);
     }
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      Provider.of<BaseAuth>(context).signInWithFacebook();
-    } catch (e) {
+      await Provider.of<BaseAuth>(context).signInWithFacebook();
+    } on PlatformException catch (e) {
       print("_signInAnonymously: There was an error: $e");
+      _showErrorMessage(context, e);
     }
   }
 
   void _signInWithEmail(BuildContext context) {
-    //TODO showing email and password page
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         fullscreenDialog: true,

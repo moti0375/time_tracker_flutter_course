@@ -10,27 +10,26 @@ class PlatformAlertDialog extends PlatformWidget {
   final String defaultActionText;
   final List<Widget> actions;
 
-  PlatformAlertDialog(
-      {@required this.title,
-      @required this.content,
-      @required this.defaultActionText,
-      @required this.actions})
+  PlatformAlertDialog({@required this.title,
+    @required this.content,
+    @required this.defaultActionText,
+    @required this.actions})
       : assert(title != null),
         assert(content != null),
         assert(defaultActionText != null),
-        assert(actions != null);
+        assert(actions != null) ;
 
   Future<bool> show(BuildContext context) async {
     return Platform.isIOS
         ? await showCupertinoDialog<bool>(
-            context: context,
-            builder: (context) => this,
-          )
+      context: context,
+      builder: (context) => this,
+    )
         : await showDialog<bool>(
-            barrierDismissible: false,
-            context: context,
-            builder: (context) => this,
-          );
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => this,
+    );
   }
 
   @override
@@ -38,7 +37,7 @@ class PlatformAlertDialog extends PlatformWidget {
     return CupertinoAlertDialog(
       title: Text(title),
       content: Text(content),
-      actions: actions,
+      actions: actions.isEmpty ? _setDefaultAction(context): actions,
     );
   }
 
@@ -47,11 +46,11 @@ class PlatformAlertDialog extends PlatformWidget {
     return AlertDialog(
       title: Text(title),
       content: Text(content),
-      actions: actions,
+      actions: actions.isEmpty ? _setDefaultAction(context): actions,
     );
   }
 
-  List<Widget> _buildActions(BuildContext context, List<Widget> actions) {
+  List<Widget> _setDefaultAction(BuildContext context) {
     return [
       PlatformAlertDialogAction(
         child: Text(defaultActionText),

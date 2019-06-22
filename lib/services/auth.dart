@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -11,12 +12,19 @@ class User {
 
 abstract class BaseAuth {
   Stream<User> get onAuthStateChanged;
+
   Future<User> currentUser();
+
   Future<User> singInAnonymously();
+
   Future<void> signOut();
+
   Future<User> signInWithGoogle();
+
   Future<User> signInWithFacebook();
+
   Future<User> signInWithEmailAndPassword(String email, String password);
+
   Future<User> createAccount(String email, String password);
 }
 
@@ -65,40 +73,52 @@ class Auth implements BaseAuth {
     GoogleSignInAccount account = await googleSignIn.signIn();
     if (account != null) {
       GoogleSignInAuthentication authentication = await account.authentication;
-      if(authentication.idToken != null && authentication.accessToken != null){
+      if (authentication.idToken != null &&
+          authentication.accessToken != null) {
         FirebaseUser user = await _firebaseAuth.signInWithCredential(
-          GoogleAuthProvider.getCredential(idToken: authentication.idToken, accessToken: authentication.accessToken));
+            GoogleAuthProvider.getCredential(
+                idToken: authentication.idToken,
+                accessToken: authentication.accessToken));
         return _userFromFirebase(user);
       }
-      throw StateError("Google sign in failed");
+      throw PlatformException(
+        code: "MISSING_GOOGLE_AUTH_TOKEN",
+        message: "Google sign in failed",
+      );
     } else {
-      throw StateError("Google sign in aborted");
+      throw PlatformException(
+        code: "GOOGLE_SIGNIN_ABORTED",
+        message: "Sign in aborted",
+      );
     }
   }
 
   @override
-  Future<User> signInWithFacebook() async{
+  Future<User> signInWithFacebook() async {
     final facebookLogin = FacebookLogin();
-    FacebookLoginResult result = await facebookLogin.logInWithReadPermissions(['public_profile']);
-    if(result.accessToken != null){
-      FirebaseUser user = await _firebaseAuth.signInWithCredential(FacebookAuthProvider.getCredential(accessToken: result.accessToken.token));
+    FacebookLoginResult result =
+        await facebookLogin.logInWithReadPermissions(['public_profile']);
+    if (result.accessToken != null) {
+      FirebaseUser user = await _firebaseAuth.signInWithCredential(
+          FacebookAuthProvider.getCredential(
+              accessToken: result.accessToken.token));
       return _userFromFirebase(user);
-    }else{
-      throw StateError("Facebook access token error");
+    } else {
+      throw PlatformException(code: "FACEBOOK_TOKEN_ERROR", message: "Facebook access token error");
     }
   }
-
 
   @override
   Future<User> createAccount(String email, String password) async {
-    FirebaseUser firebaseUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+    FirebaseUser firebaseUser = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
     return _userFromFirebase(firebaseUser);
   }
 
   @override
   Future<User> signInWithEmailAndPassword(String email, String password) async {
-    FirebaseUser firebaseUser = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+    FirebaseUser firebaseUser = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
     return _userFromFirebase(firebaseUser);
   }
-
 }
