@@ -22,6 +22,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
+
+
   Future<void> _submit() async {
     print('_submit called');
 
@@ -116,6 +118,16 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       onEditingComplete: () => _emailEditComplete(context, model),
       onChanged: widget.emailSignInBloc.updateEmail,
     );
+  }
+
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _emailController.dispose();
+    _passwordFocusNode.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override

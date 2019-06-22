@@ -169,6 +169,15 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
   }
 
   @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _emailController.dispose();
+    _passwordFocusNode.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
