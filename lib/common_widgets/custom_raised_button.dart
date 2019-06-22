@@ -19,12 +19,14 @@ class CustomRaisedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       height: height,
       child: RaisedButton(
         child: isLoading ? _buildProgressBar() : child,
         onPressed: onPressed,
         color: color,
+        disabledColor: color.withOpacity(0.5),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
       ),

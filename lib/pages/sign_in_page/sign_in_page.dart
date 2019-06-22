@@ -10,16 +10,14 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:flutter/services.dart';
 
 class SignInPage extends StatelessWidget {
-
   SignInPage({@required this.bloc});
+
   final bloc;
 
-
-  void _showErrorMessage(BuildContext context, PlatformException exception){
-    PlatformExceptionAlertDialog platformAlertDialog = PlatformExceptionAlertDialog(
-        title: "Sign in failed",
-        exception: exception,
-        actions: []);
+  void _showErrorMessage(BuildContext context, PlatformException exception) {
+    PlatformExceptionAlertDialog platformAlertDialog =
+        PlatformExceptionAlertDialog(
+            title: "Sign in failed", exception: exception, actions: []);
     platformAlertDialog.show(context).then((selection) {});
   }
 
@@ -67,12 +65,11 @@ class SignInPage extends StatelessWidget {
         actions: <Widget>[],
       ).build(context),
       body: StreamBuilder<bool>(
-        stream: bloc.isLoadingStream,
-        initialData: false,
-        builder: (context, snapshot) {
-          return _buildContent(context, snapshot.data);
-        }
-      ),
+          stream: bloc.isLoadingStream,
+          initialData: false,
+          builder: (context, snapshot) {
+            return _buildContent(context, snapshot.data);
+          }),
       backgroundColor: Colors.grey[200],
     );
   }
@@ -84,10 +81,9 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          isLoading ? CircularProgressIndicator() : Text(
-            "Sign in",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
+          SizedBox(
+            child: _buildHeader(isLoading),
+            height: 50,
           ),
           SizedBox(
             height: 8.0,
@@ -97,7 +93,7 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.black87,
             color: Colors.white,
             assetName: "images/google-logo.png",
-            onPressed: () => _signInWithGoogle(context),
+            onPressed: isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(
             height: 8,
@@ -108,7 +104,7 @@ class SignInPage extends StatelessWidget {
               textColor: Colors.white,
               color: Color(0xFF334D92),
               assetName: "images/facebook-logo.png",
-              onPressed: () => _signInWithFacebook(context),
+              onPressed: isLoading ? null : () => _signInWithFacebook(context),
             ),
           ),
           SizedBox(
@@ -118,7 +114,7 @@ class SignInPage extends StatelessWidget {
             text: "Sign in with email",
             textColor: Colors.white,
             color: Colors.teal[700],
-            onPressed: () => _signInWithEmail(context),
+            onPressed: isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(
             height: 8,
@@ -135,10 +131,25 @@ class SignInPage extends StatelessWidget {
             text: "Go Anonymoues",
             textColor: Colors.black,
             color: Colors.lime[300],
-            onPressed: () => _signInAnonymously(context),
+            onPressed: isLoading ? null : () => _signInAnonymously(context),
           ),
         ],
       ),
+    );
+  }
+
+  Row _buildHeader(bool isLoading) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        isLoading
+            ? CircularProgressIndicator()
+            : Text(
+                "Sign in",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
+              ),
+      ],
     );
   }
 }
