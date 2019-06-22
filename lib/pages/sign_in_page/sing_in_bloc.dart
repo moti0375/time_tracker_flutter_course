@@ -16,7 +16,7 @@ class SignInBloc{
     _isLoadingController.close();
   }
 
-  void setIsLoading(bool isLoading){
+  void _setIsLoading(bool isLoading){
     _isLoadingController.add(isLoading);
   }
 
@@ -28,12 +28,12 @@ class SignInBloc{
 
   Future<User> _signIn(Future<User> Function() signIn) async {
     try{
-      setIsLoading(true);
+      _setIsLoading(true);
       return await signIn();
     } catch (e){
       rethrow;
     } finally {
-      setIsLoading(false);
+      _setIsLoading(false);
     }
   }
 

@@ -17,7 +17,7 @@ class LandingPage extends StatelessWidget {
           if (user != null) {
             return HomePage(); //Placeholder for HomePage
           } else {
-            return _buildSignInPage();
+            return _buildSignInPage(auth);
           }
         } else {
           return Scaffold(
@@ -30,8 +30,8 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSignInPage(){
-    final signInBloc = SignInBloc();
+  Widget _buildSignInPage(BaseAuth auth){
+    final signInBloc = SignInBloc(auth: auth);
     return StatefulProvider<SignInBloc>(
       valueBuilder: (context) => signInBloc,
       onDispose: (context, bloc) => bloc.dispose(),
