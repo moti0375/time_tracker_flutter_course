@@ -7,6 +7,7 @@ import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.da
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_model.dart';
+import 'package:time_tracker_flutter_course/pages/sign_in_page/sing_in_bloc.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/auth_provider.dart';
 import 'package:time_tracker_flutter_course/utils/validators.dart';
@@ -19,6 +20,25 @@ import 'package:time_tracker_flutter_course/utils/validators.dart';
 
 class EmailSignInFormStful extends StatefulWidget
     with EmailAndPasswordValidators {
+
+  final SignInBloc emailSignInBloc;
+  EmailSignInFormStful({@required this.emailSignInBloc});
+
+  static Widget create(BuildContext context) {
+    final BaseAuth auth = Provider.of<BaseAuth>(context);
+    return StatefulProvider<SignInBloc>(
+      valueBuilder: (context) => SignInBloc(auth: auth),
+      child: Consumer<SignInBloc>(
+        builder: (context, bloc) => EmailSignInFormStful(
+          emailSignInBloc: bloc,
+        ),
+      ),
+      onDispose: (context, bloc){
+        bloc.dispose();
+      },
+    );
+  }
+
   @override
   _EmailSignInFormStfulState createState() => _EmailSignInFormStfulState();
 }

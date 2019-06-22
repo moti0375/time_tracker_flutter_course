@@ -11,8 +11,18 @@ import 'package:flutter/services.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({@required this.bloc});
-
   final SignInBloc bloc;
+
+  static Widget create(BuildContext context){
+    final auth = Provider.of<BaseAuth>(context);
+    final signInBloc = SignInBloc(auth: auth);
+    return StatefulProvider<SignInBloc>(
+      valueBuilder: (context) => signInBloc,
+      onDispose: (context, bloc) => bloc.dispose(),
+      child: SignInPage(bloc: signInBloc,),
+    );
+
+  }
 
   void _showErrorMessage(BuildContext context, PlatformException exception) {
     PlatformExceptionAlertDialog platformAlertDialog =
