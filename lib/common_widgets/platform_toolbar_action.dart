@@ -13,6 +13,7 @@ class PlatformFlatButton extends PlatformWidget {
   @override
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoButton(
+      padding: EdgeInsets.all(8),
       child: title,
       onPressed: onPressed,
     );

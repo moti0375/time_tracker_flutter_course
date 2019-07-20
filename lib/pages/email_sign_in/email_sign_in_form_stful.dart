@@ -26,14 +26,14 @@ class EmailSignInFormStful extends StatefulWidget
 
   static Widget create(BuildContext context) {
     final BaseAuth auth = Provider.of<BaseAuth>(context);
-    return StatefulProvider<SignInBloc>(
-      valueBuilder: (context) => SignInBloc(auth: auth),
+    return Provider<SignInBloc>(
+      builder: (context) => SignInBloc(auth: auth),
       child: Consumer<SignInBloc>(
-        builder: (context, bloc) => EmailSignInFormStful(
+        builder: (context, bloc, _) => EmailSignInFormStful(
           emailSignInBloc: bloc,
         ),
       ),
-      onDispose: (context, bloc){
+      dispose: (context, bloc){
         bloc.dispose();
       },
     );

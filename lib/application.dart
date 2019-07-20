@@ -9,7 +9,7 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<BaseAuth>(
-      value: Auth(),
+      builder:(context)=> Auth(),
       child: MaterialApp(
         title: "TimeTracker",
         theme: ThemeData(

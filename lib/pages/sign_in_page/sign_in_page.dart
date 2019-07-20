@@ -15,11 +15,12 @@ class SignInPage extends StatelessWidget {
 
   static Widget create(BuildContext context){
     final auth = Provider.of<BaseAuth>(context);
-    final signInBloc = SignInBloc(auth: auth);
-    return StatefulProvider<SignInBloc>(
-      valueBuilder: (context) => signInBloc,
-      onDispose: (context, bloc) => bloc.dispose(),
-      child: SignInPage(bloc: signInBloc,),
+    return Provider<SignInBloc>(
+      builder: (context) => SignInBloc(auth: auth),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: Consumer<SignInBloc>(
+        builder: (context, bloc, _) => SignInPage(bloc: bloc),
+      ),
     );
 
   }
