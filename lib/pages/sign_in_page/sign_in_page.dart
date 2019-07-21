@@ -4,25 +4,42 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_exception_al
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_page.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/sign_in_button.dart';
-import 'package:time_tracker_flutter_course/pages/sign_in_page/sing_in_bloc.dart';
+import 'package:time_tracker_flutter_course/pages/sign_in_page/sing_in_manager.dart';
 import 'package:time_tracker_flutter_course/pages/sign_in_page/social_sign_in_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:flutter/services.dart';
 
 class SignInPage extends StatelessWidget {
-  SignInPage({@required this.bloc});
-  final SignInBloc bloc;
+  SignInPage({
+    Key key,
+    @required this.manager,
+    @required this.isLoading,
+  });
 
-  static Widget create(BuildContext context){
+  final SignInManager manager;
+  final bool isLoading;
+
+  static Widget create(BuildContext context) {
     final auth = Provider.of<BaseAuth>(context);
-    return Provider<SignInBloc>(
-      builder: (context) => SignInBloc(auth: auth),
-      dispose: (context, bloc) => bloc.dispose(),
-      child: Consumer<SignInBloc>(
-        builder: (context, bloc, _) => SignInPage(bloc: bloc),
+    return Provider<ValueNotifier<bool>>(
+      dispose: (context, valueNotifier) => valueNotifier.dispose(),
+      builder: (context) => ValueNotifier<bool>(false),
+      child: Consumer<ValueNotifier<bool>>(
+        builder: (context, valueNotifier, _) => Provider<SignInManager>(
+          builder: (context) =>
+              SignInManager(auth: auth, isLoading: valueNotifier),
+          child: Consumer<SignInManager>(
+            builder: (context, bloc, _) => ValueListenableBuilder<bool>(
+              valueListenable: valueNotifier,
+              builder: (context, isLoading, _) => SignInPage(
+                manager: bloc,
+                isLoading: isLoading,
+              ),
+            ),
+          ),
+        ),
       ),
     );
-
   }
 
   void _showErrorMessage(BuildContext context, PlatformException exception) {
@@ -34,7 +51,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      await bloc.signInAnonymously();
+      await manager.signInAnonymously();
     } on PlatformException catch (e) {
       print("_signInAnonymously: There was an error: $e");
       _showErrorMessage(context, e);
@@ -43,7 +60,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      await bloc.singInWithGoogle();
+      await manager.singInWithGoogle();
     } on PlatformException catch (e) {
       print("_signInWithGoogle: There was an error: $e");
       _showErrorMessage(context, e);
@@ -52,7 +69,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      await bloc.signInWithFacebook();
+      await manager.signInWithFacebook();
     } on PlatformException catch (e) {
       print("_signInAnonymously: There was an error: $e");
       _showErrorMessage(context, e);
@@ -75,17 +92,12 @@ class SignInPage extends StatelessWidget {
         title: Text("Flutter Time Tracker"),
         actions: <Widget>[],
       ).build(context),
-      body: StreamBuilder<bool>(
-          stream: bloc.isLoadingStream,
-          initialData: false,
-          builder: (context, snapshot) {
-            return _buildContent(context, snapshot.data);
-          }),
+      body: _buildContent(context),
       backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _buildContent(BuildContext context, bool isLoading) {
+  Widget _buildContent(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -93,7 +105,7 @@ class SignInPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           SizedBox(
-            child: _buildHeader(isLoading),
+            child: _buildHeader(),
             height: 50,
           ),
           SizedBox(
@@ -149,7 +161,7 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Row _buildHeader(bool isLoading) {
+  Row _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
