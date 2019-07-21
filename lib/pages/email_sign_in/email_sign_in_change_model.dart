@@ -78,7 +78,6 @@ class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
         "password: ${this.password.trim()}");
 
     try {
-      await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
       if (this.formType == EmailSignInFormType.signIn) {
         await auth.signInWithEmailAndPassword(
             this.email, this.password);
