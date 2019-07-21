@@ -9,7 +9,6 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_exception_al
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_model.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sing_in_bloc.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
-import 'package:time_tracker_flutter_course/services/auth_provider.dart';
 import 'package:time_tracker_flutter_course/utils/validators.dart';
 
 /*
@@ -68,7 +67,7 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
 
     try {
       final BaseAuth auth = Provider.of<BaseAuth>(context);
-      await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
+//      await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
       if (_formType == EmailSignInFormType.signIn) {
         await auth.signInWithEmailAndPassword(_email, _password);
       } else {
