@@ -57,7 +57,7 @@ class EmailSignInBloc {
         "password: ${_currentModel.password.trim()}");
 
     try {
-      await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
+    //  await Future.delayed(Duration(seconds: 5)); //Simulating a slow network
       if (_currentModel.formType == EmailSignInFormType.signIn) {
         await auth.signInWithEmailAndPassword(
             _currentModel.email, _currentModel.password);
