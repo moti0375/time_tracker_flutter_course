@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
+
+/*
+*
+* Not in use!
+* Using Provider instead InheritedWidget
+*
+* **/
 class AuthProvider extends InheritedWidget{
 
   final BaseAuth auth;
