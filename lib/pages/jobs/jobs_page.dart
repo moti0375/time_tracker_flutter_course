@@ -5,7 +5,7 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
-class HomePage extends StatelessWidget {
+class JobsPage extends StatelessWidget {
 
 
   _signOut(BuildContext context) async {
@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PlatformToolbar appBar = PlatformToolbar(
-      title: Text("Home Page"),
+      title: Text("Jobs"),
       actions: _buildToolbarActions(context),
     );
 
