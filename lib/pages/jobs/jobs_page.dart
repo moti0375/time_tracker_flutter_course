@@ -21,6 +21,9 @@ class JobsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    //TODO: Temporary, delete this later
+    _readJobs(context);
     PlatformToolbar appBar = PlatformToolbar(
       title: Text("Jobs"),
       actions: _buildToolbarActions(context),
@@ -76,12 +79,17 @@ class JobsPage extends StatelessWidget {
 
     try {
       final database = Provider.of<Database>(context);
-      Job job = Job(name: "Meeting", ratePerHour: 35);
+      Job job = Job(name: "Vacation", ratePerHour: 50);
       await database.createJob(job);
     } on PlatformException catch(e){
       PlatformExceptionAlertDialog(title: "Operation Failed", exception: e, actions: []).show(context);
     }
 
 
+  }
+
+  void _readJobs(BuildContext context) {
+   final database =  Provider.of<Database>(context);
+   database.readJobs();
   }
 }

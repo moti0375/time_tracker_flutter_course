@@ -5,6 +5,7 @@ import 'package:time_tracker_flutter_course/services/api_path.dart';
 
 abstract class Database {
   Future<void> createJob(Job job);
+  void readJobs();
 }
 
 class FirestoreDatabase implements Database {
@@ -18,5 +19,14 @@ class FirestoreDatabase implements Database {
     final documentReference = Firestore.instance.document(path);
     print("FirestoreDatabase: _setData: $path: $data");
     await documentReference.setData(data);
+  }
+
+  void readJobs() async {
+    final path = ApiPath.jobs(uid);
+    final documentReference = Firestore.instance.collection(path);
+    final snapshots = documentReference.snapshots();
+    snapshots.listen((snapshot){
+      snapshot.documents.forEach((doc) => print(doc.data));
+    });
   }
 }
