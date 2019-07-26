@@ -4,10 +4,9 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
+import 'package:time_tracker_flutter_course/services/database.dart';
 
 class JobsPage extends StatelessWidget {
-
-
   _signOut(BuildContext context) async {
     try {
       await Provider.of<BaseAuth>(context).signOut();
@@ -25,6 +24,10 @@ class JobsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: appBar.build(context),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+          onPressed: ()=> _createJob(context)
+      ),
     );
   }
 
@@ -32,9 +35,7 @@ class JobsPage extends StatelessWidget {
     return <Widget>[
       PlatformFlatButton(
         title: Text("Signout"),
-        onPressed: () {
-          _showSignOutDialog(context);
-        },
+        onPressed: () => _showSignOutDialog(context),
       ),
     ];
   }
@@ -65,5 +66,10 @@ class JobsPage extends StatelessWidget {
             Navigator.of(context).pop(true);
           })
     ];
+  }
+
+  Future<void> _createJob(BuildContext context) async {
+    final database = Provider.of<Database>(context);
+    await database.createJob({'name' : 'Coding', 'ratePerHour' : 25});
   }
 }
