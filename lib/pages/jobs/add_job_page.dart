@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
+import 'package:time_tracker_flutter_course/services/database.dart';
 
 class AddJobPage extends StatefulWidget {
+  const AddJobPage({Key key, @required this.database}) : super(key: key);
+  final Database database;
+
   static Future<void> show(BuildContext context) async {
-    await Navigator.of(context).push(new MaterialPageRoute(
-      builder: (context) => AddJobPage(),
+    Database database = Provider.of<Database>(context);
+    await
+    Navigator.of(context).push(new MaterialPageRoute(
+      builder: (context) => AddJobPage(database: database,),
       fullscreenDialog: true,
     ));
   }
@@ -75,22 +82,21 @@ class AddJobPageState extends State<AddJobPage> {
         keyboardType: TextInputType.numberWithOptions(
           signed: false,
           decimal: false,
-        ),onSaved: (rate) => ratePerHour = int.parse(rate) ?? 0,
+        ), onSaved: (rate) => ratePerHour = int.parse(rate) ?? 0,
       ),
     ];
   }
 
   void _submit() {
-    if(_validateAndSaveForm()){
+    if (_validateAndSaveForm()) {
       print("Form validated and saved: name: $name, ratePerHour: $ratePerHour");
       //TODO: Submit value to firestore
     }
-
   }
 
-  bool _validateAndSaveForm(){
+  bool _validateAndSaveForm() {
     final form = _formKey.currentState;
-    if(form.validate()){
+    if (form.validate()) {
       form.save();
       return true;
     }
