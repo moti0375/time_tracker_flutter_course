@@ -8,4 +8,8 @@ class Job{
   Map<String, dynamic> toMap(){
     return {'name': name, 'ratePerHour' : ratePerHour};
   }
+
+  static Job fromMap(Map<String, dynamic> map){
+    return Job(name: map["name"], ratePerHour: map["ratePerHour"]);
+  }
 }
