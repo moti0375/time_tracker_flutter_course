@@ -4,6 +4,7 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog
 import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
+import 'package:time_tracker_flutter_course/pages/jobs/add_job_page.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +34,7 @@ class JobsPage extends StatelessWidget {
       body: _buildContent(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-          onPressed: ()=> _createJob(context)
+          onPressed: ()=> AddJobPage.show(context)
       ),
     );
   }
