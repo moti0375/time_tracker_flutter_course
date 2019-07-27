@@ -23,6 +23,24 @@ class AddJobPageState extends State<AddJobPage> {
         title: Text("New Job"),
         actions: <Widget>[],
       ).build(context),
+      body: _buildContent(context),
+      backgroundColor: Colors.grey[200],
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Placeholder(
+              fallbackHeight: 200,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

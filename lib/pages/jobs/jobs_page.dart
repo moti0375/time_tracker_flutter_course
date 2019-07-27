@@ -76,18 +76,6 @@ class JobsPage extends StatelessWidget {
     ];
   }
 
-  Future<void> _createJob(BuildContext context) async {
-
-    try {
-      final database = Provider.of<Database>(context);
-      Job job = Job(name: "Vacation", ratePerHour: 50);
-      await database.createJob(job);
-    } on PlatformException catch(e){
-      PlatformExceptionAlertDialog(title: "Operation Failed", exception: e, actions: []).show(context);
-    }
-
-
-  }
 
   Widget _buildContent(BuildContext context) {
     final database = Provider.of<Database>(context);
