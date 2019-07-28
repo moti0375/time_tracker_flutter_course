@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
+import 'package:time_tracker_flutter_course/pages/jobs/models/job.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 
 class AddJobPage extends StatefulWidget {
@@ -26,8 +27,8 @@ class AddJobPage extends StatefulWidget {
 class AddJobPageState extends State<AddJobPage> {
 
   final _formKey = GlobalKey<FormState>();
-  String name;
-  int ratePerHour;
+  String _name;
+  int _ratePerHour;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class AddJobPageState extends State<AddJobPage> {
     return [
       TextFormField(
         decoration: InputDecoration(labelText: "Job name"),
-        onSaved: (value) => name = value,
+        onSaved: (value) => _name = value,
         validator: (value) => value.isNotEmpty ? null : "Name cant be empty",
       ),
       TextFormField(
@@ -82,15 +83,17 @@ class AddJobPageState extends State<AddJobPage> {
         keyboardType: TextInputType.numberWithOptions(
           signed: false,
           decimal: false,
-        ), onSaved: (rate) => ratePerHour = int.parse(rate) ?? 0,
+        ), onSaved: (rate) => _ratePerHour = int.parse(rate) ?? 0,
       ),
     ];
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_validateAndSaveForm()) {
-      print("Form validated and saved: name: $name, ratePerHour: $ratePerHour");
-      //TODO: Submit value to firestore
+      print("Form validated and saved: name: $_name, ratePerHour: $_ratePerHour");
+      Job job = Job(name: _name, ratePerHour: _ratePerHour);
+      await widget.database.createJob(job);
+      Navigator.of(context).pop();
     }
   }
 

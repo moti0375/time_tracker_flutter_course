@@ -15,7 +15,15 @@ class FirestoreDatabase implements Database {
 
   FirestoreDatabase({@required this.uid}) : assert(uid != null);
 
-  Future<void> createJob(Job job) async => await _service.setData(ApiPath.job(uid, 'job_abc'), job.toMap());
+  Future<void> createJob(Job job) async => await _service.setData(
+        ApiPath.job(uid, docIdFromDateTime()),
+        job.toMap(),
+      );
 
-  Stream<List<Job>> jobsStream() =>  _service.collectionStream(path: ApiPath.jobs(uid), builder: (data) => Job.fromMap(data));
+  Stream<List<Job>> jobsStream() => _service.collectionStream(
+        path: ApiPath.jobs(uid),
+        builder: (data) => Job.fromMap(data),
+      );
+
+  String docIdFromDateTime() => DateTime.now().toIso8601String();
 }
