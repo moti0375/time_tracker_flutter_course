@@ -5,6 +5,7 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_exception_al
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/add_job_page.dart';
+import 'package:time_tracker_flutter_course/pages/jobs/job_list_tile.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 import 'package:flutter/services.dart';
@@ -22,8 +23,6 @@ class JobsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     PlatformToolbar appBar = PlatformToolbar(
       title: Text("Jobs"),
       actions: _buildToolbarActions(context),
@@ -33,9 +32,7 @@ class JobsPage extends StatelessWidget {
       appBar: appBar.build(context),
       body: _buildContent(context),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-          onPressed: ()=> AddJobPage.show(context)
-      ),
+          child: Icon(Icons.add), onPressed: () => AddJobPage.show(context, null)),
     );
   }
 
@@ -76,21 +73,27 @@ class JobsPage extends StatelessWidget {
     ];
   }
 
-
   Widget _buildContent(BuildContext context) {
     final database = Provider.of<Database>(context);
     return StreamBuilder<List<Job>>(
       stream: database.jobsStream(),
-      builder: (context, snapshot){
-        if(snapshot.hasData){
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
           final jobs = snapshot.data;
-          final children = jobs.map((job) => Text(job.name)).toList();
+          final children = jobs
+              .map(
+                (job) => JobListTile(
+                  job: job,
+                  onTap: () => AddJobPage.show(context, job),
+                ),
+              )
+              .toList();
           return ListView(
             children: children,
           );
         }
 
-        if(snapshot.hasError){
+        if (snapshot.hasError) {
           return Center(
             child: Text("Some error occurred"),
           );

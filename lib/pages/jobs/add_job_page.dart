@@ -10,14 +10,15 @@ import 'package:flutter/services.dart';
 
 
 class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key key, @required this.database}) : super(key: key);
+  const AddJobPage({Key key, @required this.database, this.job}) : super(key: key);
+  final Job job;
   final Database database;
 
-  static Future<void> show(BuildContext context) async {
+  static Future<void> show(BuildContext context, Job job) async {
     Database database = Provider.of<Database>(context);
     await
     Navigator.of(context).push(new MaterialPageRoute(
-      builder: (context) => AddJobPage(database: database,),
+      builder: (context) => AddJobPage(database: database, job: job,),
       fullscreenDialog: true,
     ));
   }
@@ -33,6 +34,13 @@ class AddJobPageState extends State<AddJobPage> {
   final _formKey = GlobalKey<FormState>();
   String _name;
   int _ratePerHour;
+  @override
+  void initState() {
+    super.initState();
+    if(widget.job != null){
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
