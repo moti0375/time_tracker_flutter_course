@@ -111,6 +111,9 @@ class EditJobPageState extends State<EditJobPage> {
             .first;
 
         final allNames = jobs.map((job) => job.name).toList();
+        if(widget.job != null){
+          allNames.remove(widget.job.name);
+        }
         if(allNames.contains(_name)){
           PlatformAlertDialog(
             title: "Name already used",
@@ -119,8 +122,9 @@ class EditJobPageState extends State<EditJobPage> {
             actions: _buildActions(),
           ).show(context);
         } else {
-          Job job = Job(name: _name, ratePerHour: _ratePerHour);
-          await widget.database.createJob(job);
+          final id = widget.job?.id ?? _docIdFromDateTime();
+          Job job = Job(name: _name, ratePerHour: _ratePerHour, id: id);
+          await widget.database.setJob(job);
           Navigator.of(context).pop();
           print("Form validated and saved: name: $_name, ratePerHour: $_ratePerHour");
         }
@@ -133,6 +137,8 @@ class EditJobPageState extends State<EditJobPage> {
       }
     }
   }
+
+  String _docIdFromDateTime() => DateTime.now().toIso8601String();
 
   List<Widget> _buildActions() {
     return [
