@@ -4,7 +4,7 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog
 import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
-import 'package:time_tracker_flutter_course/pages/jobs/add_job_page.dart';
+import 'package:time_tracker_flutter_course/pages/jobs/edit_job_page.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/job_list_tile.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
@@ -32,7 +32,7 @@ class JobsPage extends StatelessWidget {
       appBar: appBar.build(context),
       body: _buildContent(context),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add), onPressed: () => AddJobPage.show(context, null)),
+          child: Icon(Icons.add), onPressed: () => EditJobPage.show(context)),
     );
   }
 
@@ -84,7 +84,7 @@ class JobsPage extends StatelessWidget {
               .map(
                 (job) => JobListTile(
                   job: job,
-                  onTap: () => AddJobPage.show(context, job),
+                  onTap: () => EditJobPage.show(context, job: job),
                 ),
               )
               .toList();
