@@ -94,20 +94,32 @@ class AddJobPageState extends State<AddJobPage> {
 
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
-      try{
-        print("Form validated and saved: name: $_name, ratePerHour: $_ratePerHour");
-        Job job = Job(name: _name, ratePerHour: _ratePerHour);
-        await widget.database.createJob(job);
-        Navigator.of(context).pop();
-      } on PlatformException catch(e){
+      try {
+        final jobs = await widget.database
+            .jobsStream()
+            .first;
+
+        final allNames = jobs.map((job) => job.name).toList();
+        if(allNames.contains(_name)){
+          PlatformAlertDialog(
+            title: "Name already used",
+            content: "Please choose a different name",
+            defaultActionText: "OK",
+            actions: _buildActions(),
+          ).show(context);
+        } else {
+          Job job = Job(name: _name, ratePerHour: _ratePerHour);
+          await widget.database.createJob(job);
+          Navigator.of(context).pop();
+          print("Form validated and saved: name: $_name, ratePerHour: $_ratePerHour");
+        }
+      } on PlatformException catch (e) {
         PlatformExceptionAlertDialog platformAlertDialog = PlatformExceptionAlertDialog(
             title: "Oparation failed",
             exception: e,
             actions: _buildActions());
         platformAlertDialog.show(context).then((selection) {});
-
       }
-
     }
   }
 
