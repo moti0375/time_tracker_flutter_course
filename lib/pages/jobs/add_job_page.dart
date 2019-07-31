@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/models/job.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
+import 'package:flutter/services.dart';
+
 
 class AddJobPage extends StatefulWidget {
   const AddJobPage({Key key, @required this.database}) : super(key: key);
@@ -90,11 +94,31 @@ class AddJobPageState extends State<AddJobPage> {
 
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
-      print("Form validated and saved: name: $_name, ratePerHour: $_ratePerHour");
-      Job job = Job(name: _name, ratePerHour: _ratePerHour);
-      await widget.database.createJob(job);
-      Navigator.of(context).pop();
+      try{
+        print("Form validated and saved: name: $_name, ratePerHour: $_ratePerHour");
+        Job job = Job(name: _name, ratePerHour: _ratePerHour);
+        await widget.database.createJob(job);
+        Navigator.of(context).pop();
+      } on PlatformException catch(e){
+        PlatformExceptionAlertDialog platformAlertDialog = PlatformExceptionAlertDialog(
+            title: "Oparation failed",
+            exception: e,
+            actions: _buildActions());
+        platformAlertDialog.show(context).then((selection) {});
+
+      }
+
     }
+  }
+
+  List<Widget> _buildActions() {
+    return [
+      PlatformAlertDialogAction(
+          child: Text("OK"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          })
+    ];
   }
 
   bool _validateAndSaveForm() {
