@@ -7,8 +7,11 @@ class ListItemBuilder<T> extends StatelessWidget {
   final AsyncSnapshot<List<T>> snapshot;
   final ItemWidgetBuilder<T> itemBuilder;
 
-  const ListItemBuilder({Key key, this.snapshot, this.itemBuilder})
-      : super(key: key);
+  const ListItemBuilder({
+    Key key,
+    @required this.snapshot,
+    @required this.itemBuilder,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,9 @@ class ListItemBuilder<T> extends StatelessWidget {
       }
     } else if (snapshot.hasError) {
       return EmptyContent(
-        title: "Somthing went wrong", message: "Can't load items right now",);
+        title: "Somthing went wrong",
+        message: "Can't load items right now",
+      );
     }
     return Center(
       child: CircularProgressIndicator(),
@@ -29,9 +34,15 @@ class ListItemBuilder<T> extends StatelessWidget {
   }
 
   Widget _buildList(List<T> items) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) => itemBuilder(context, items[index]),
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(height: 0.5,),
+      itemCount: items.length + 2,
+      itemBuilder: (context, index) {
+        if(index == 0 || index == items.length + 1){
+          return Container();
+        }
+        return itemBuilder(context, items[index - 1]);
+      }
     );
   }
 }
