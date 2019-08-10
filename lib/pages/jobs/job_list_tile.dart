@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:time_tracker_flutter_course/pages/jobs/models/job.dart';
+import 'package:time_tracker_flutter_course/models/job.dart';
 
 class JobListTile extends StatelessWidget {
 

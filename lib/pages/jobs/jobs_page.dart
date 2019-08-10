@@ -4,15 +4,15 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog
 import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
+import 'package:time_tracker_flutter_course/models/job.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/edit_job_page.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/empty_content.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/job_list_tile.dart';
-import 'package:time_tracker_flutter_course/pages/jobs/list_item_builder.dart';
+import 'package:time_tracker_flutter_course/utils/list_item_builder.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 import 'package:flutter/services.dart';
 
-import 'models/job.dart';
 
 class JobsPage extends StatelessWidget {
   _signOut(BuildContext context) async {
@@ -94,7 +94,7 @@ class JobsPage extends StatelessWidget {
     return StreamBuilder<List<Job>>(
         stream: database.jobsStream(),
         builder: (context, snapshot) {
-          return ListItemBuilder<Job>(
+          return ListItemsBuilder<Job>(
             snapshot: snapshot,
             itemBuilder: (context, job) => Dismissible(
               key: Key("job-${job.id}"),
