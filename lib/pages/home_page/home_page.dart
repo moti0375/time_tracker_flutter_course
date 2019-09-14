@@ -10,13 +10,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TabItem tab = TabItem.jobs;
 
+  void _select(TabItem tabItem) {
+    setState(() {
+      tab = tabItem;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoHomeScaffold(
       currentTab: tab,
-      onSelectTab: (item) {
-
-      },
+      onSelectTab: _select,
     );
   }
+
+
 }

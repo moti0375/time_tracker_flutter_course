@@ -16,11 +16,22 @@ class CupertinoHomeScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-          items: [
-            _buildItem(TabItem.jobs),
-            _buildItem(TabItem.entries),
-            _buildItem(TabItem.account)
-          ], onTap: (index) => onSelectTab(TabItem.values[index])),
+        items: [
+          _buildItem(TabItem.jobs),
+          _buildItem(TabItem.entries),
+          _buildItem(TabItem.account)
+        ],
+        onTap: (index) => onSelectTab(TabItem.values[index]),
+      ),
+      tabBuilder: (context, index) {
+        return CupertinoTabView(
+          builder: (context) {
+            return Container(
+
+            );
+          },
+        );
+      },
     );
   }
 
