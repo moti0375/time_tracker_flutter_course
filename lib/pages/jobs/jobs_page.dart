@@ -5,6 +5,7 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_exception_al
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_toolbar_action.dart';
 import 'package:time_tracker_flutter_course/models/job.dart';
+import 'package:time_tracker_flutter_course/pages/job_entries/job_entries_page.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/edit_job_page.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/empty_content.dart';
 import 'package:time_tracker_flutter_course/pages/jobs/job_list_tile.dart';
@@ -12,7 +13,6 @@ import 'package:time_tracker_flutter_course/utils/list_item_builder.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 import 'package:flutter/services.dart';
-
 
 class JobsPage extends StatelessWidget {
   _signOut(BuildContext context) async {
@@ -34,7 +34,7 @@ class JobsPage extends StatelessWidget {
       appBar: appBar.build(context),
       body: _buildContent(context),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add), onPressed: () => EditJobPage.show(context)),
+          child: Icon(Icons.add), onPressed: () => EditJobPage.show(context, database: Provider.of<Database>(context))),
     );
   }
 
@@ -90,6 +90,7 @@ class JobsPage extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
+    print("JobsPage: _buildContent");
     final database = Provider.of<Database>(context);
     return StreamBuilder<List<Job>>(
         stream: database.jobsStream(),
@@ -102,12 +103,13 @@ class JobsPage extends StatelessWidget {
                 color: Colors.red,
               ),
               direction: DismissDirection.endToStart,
-              onDismissed: (direction) {
-                _delete(context, job);
-              },
+              onDismissed: (direction) => _delete(context, job),
               child: JobListTile(
                 job: job,
-                onTap: () => EditJobPage.show(context, job: job),
+                onTap: () {
+                  print("JobListTile: onTap");
+                  JobEntriesPage.show(context: context, job: job);
+                },
               ),
             ),
           );
