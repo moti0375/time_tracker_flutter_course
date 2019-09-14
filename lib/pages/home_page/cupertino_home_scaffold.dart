@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:time_tracker_flutter_course/pages/job_entries/job_entries_page.dart';
+import 'package:time_tracker_flutter_course/pages/jobs/jobs_page.dart';
 import 'package:time_tracker_flutter_course/pages/tabs/tabs_item.dart';
 
 class CupertinoHomeScaffold extends StatelessWidget {
   final TabItem currentTab;
   final ValueChanged<TabItem> onSelectTab;
+  final Map<TabItem, WidgetBuilder> widgetBuilders;
 
   CupertinoHomeScaffold({
     Key key,
     @required this.currentTab,
     @required this.onSelectTab,
+    @required this.widgetBuilders,
   }) : super(key: key);
 
   @override
@@ -24,12 +28,10 @@ class CupertinoHomeScaffold extends StatelessWidget {
         onTap: (index) => onSelectTab(TabItem.values[index]),
       ),
       tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (context) {
-            return Container(
+        final item = TabItem.values[index];
 
-            );
-          },
+        return CupertinoTabView(
+          builder: (context) => widgetBuilders[currentTab](context),
         );
       },
     );
