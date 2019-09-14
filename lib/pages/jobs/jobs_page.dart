@@ -25,16 +25,32 @@ class JobsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PlatformToolbar appBar = PlatformToolbar(
+    AppBar appBar = AppBar(
       title: Text("Jobs"),
-      actions: _buildToolbarActions(context),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          onPressed: () => EditJobPage.show(
+            context,
+            database: Provider.of<Database>(context),
+          ),
+        ),
+        FlatButton(
+          child: Text(
+            "Logout",
+            style: TextStyle(fontSize: 18.0, color: Colors.white),
+          ),
+          onPressed: () => _showSignOutDialog(context),
+        )
+      ],
     );
 
     return Scaffold(
-      appBar: appBar.build(context),
+      appBar: appBar,
       body: _buildContent(context),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add), onPressed: () => EditJobPage.show(context, database: Provider.of<Database>(context))),
     );
   }
 
@@ -44,6 +60,10 @@ class JobsPage extends StatelessWidget {
         title: Text("Signout"),
         onPressed: () => _showSignOutDialog(context),
       ),
+      PlatformFlatButton(
+        title: Text("Add"),
+        onPressed: () {},
+      )
     ];
   }
 

@@ -16,6 +16,7 @@ import 'package:time_tracker_flutter_course/utils/list_item_builder.dart';
 
 class JobEntriesPage extends StatelessWidget {
   const JobEntriesPage({@required this.database, @required this.job});
+
   final Database database;
   final Job job;
 
@@ -43,33 +44,32 @@ class JobEntriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Job>(
-      stream: database.jobStream(jobId: job.id),
-      builder: (context, snapshot) {
-        final job = snapshot.data;
-        final name = job?.name ?? '';
-        return Scaffold(
-          appBar: AppBar(
-            elevation: 2.0,
-            title: Text(name),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  'Edit',
-                  style: TextStyle(fontSize: 18.0, color: Colors.white),
+        stream: database.jobStream(jobId: job.id),
+        builder: (context, snapshot) {
+          final job = snapshot.data;
+          final name = job?.name ?? '';
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 2.0,
+              title: Text(name),
+              actions: <Widget>[
+                IconButton(
+                  color: Colors.white,
+                  icon: Icon(Icons.edit),
+                  onPressed: () =>
+                      EditJobPage.show(context, job: job, database: database),
                 ),
-                onPressed: () => EditJobPage.show(context, job: job, database: database),
-              ),
-            ],
-          ),
-          body: _buildContent(context, snapshot.data),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () =>
-                EntryPage.show(context: context, database: database, job: job),
-          ),
-        );
-      }
-    );
+                IconButton(
+                  color: Colors.white,
+                  icon: Icon(Icons.add),
+                  onPressed: () => EntryPage.show(
+                      context: context, database: database, job: job),
+                ),
+              ],
+            ),
+            body: _buildContent(context, snapshot.data),
+          );
+        });
   }
 
   Widget _buildContent(BuildContext context, Job job) {
