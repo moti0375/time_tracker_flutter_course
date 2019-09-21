@@ -9,10 +9,12 @@ import 'package:time_tracker_flutter_course/services/database.dart';
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final BaseAuth auth = Provider.of<BaseAuth>(context);
+    print("LandingPage: build");
+    final BaseAuth auth = Provider.of<BaseAuth>(context, listen: false);
     return StreamBuilder<User>(
       stream: auth.onAuthStateChanged,
       builder: (context, snapshot) {
+        print("LandingPage: $snapshot");
         if (snapshot.connectionState == ConnectionState.active) {
           User user = snapshot.data;
           if (user != null) {

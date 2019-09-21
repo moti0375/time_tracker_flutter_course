@@ -55,7 +55,7 @@ class JobsPage extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    print("JobsPage: _buildContent");
+    //print("JobsPage: _buildContent");
     final database = Provider.of<Database>(context);
     return StreamBuilder<List<Job>>(
         stream: database.jobsStream(),
