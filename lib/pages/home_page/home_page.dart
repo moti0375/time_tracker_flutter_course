@@ -12,6 +12,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TabItem tab = TabItem.jobs;
 
+  final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
+    TabItem.jobs : GlobalKey<NavigatorState>(),
+    TabItem.entries : GlobalKey<NavigatorState>(),
+    TabItem.account : GlobalKey<NavigatorState>()
+  };
+
   Map<TabItem, WidgetBuilder> get widgetBuilders {
     return {
       TabItem.jobs: (context) => JobsPage(),
@@ -28,10 +34,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoHomeScaffold(
-      currentTab: tab,
-      onSelectTab: _select,
-      widgetBuilders: widgetBuilders,
+    return WillPopScope(
+      onWillPop: () async => !await navigatorKeys[tab].currentState.maybePop(),
+      child: CupertinoHomeScaffold(
+        currentTab: tab,
+        onSelectTab: _select,
+        widgetBuilders: widgetBuilders,
+        navigationKeys: navigatorKeys,
+      ),
     );
   }
 
