@@ -13,9 +13,9 @@ class _HomePageState extends State<HomePage> {
   TabItem tab = TabItem.jobs;
 
   final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
-    TabItem.jobs : GlobalKey<NavigatorState>(),
-    TabItem.entries : GlobalKey<NavigatorState>(),
-    TabItem.account : GlobalKey<NavigatorState>()
+    TabItem.jobs: GlobalKey<NavigatorState>(),
+    TabItem.entries: GlobalKey<NavigatorState>(),
+    TabItem.account: GlobalKey<NavigatorState>()
   };
 
   Map<TabItem, WidgetBuilder> get widgetBuilders {
@@ -27,9 +27,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _select(TabItem tabItem) {
-    setState(() {
-      tab = tabItem;
-    });
+    if (tabItem == tab) {
+      navigatorKeys[tab].currentState.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        tab = tabItem;
+      });
+    }
   }
 
   @override
