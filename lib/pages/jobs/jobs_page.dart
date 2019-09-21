@@ -15,13 +15,6 @@ import 'package:time_tracker_flutter_course/services/database.dart';
 import 'package:flutter/services.dart';
 
 class JobsPage extends StatelessWidget {
-  _signOut(BuildContext context) async {
-    try {
-      await Provider.of<BaseAuth>(context).signOut();
-    } catch (e) {
-      print("_signInAnonymously: There was an error: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +31,6 @@ class JobsPage extends StatelessWidget {
             database: Provider.of<Database>(context),
           ),
         ),
-        FlatButton(
-          child: Text(
-            "Logout",
-            style: TextStyle(fontSize: 18.0, color: Colors.white),
-          ),
-          onPressed: () => _showSignOutDialog(context),
-        )
       ],
     );
 
@@ -52,47 +38,6 @@ class JobsPage extends StatelessWidget {
       appBar: appBar,
       body: _buildContent(context),
     );
-  }
-
-  List<Widget> _buildToolbarActions(BuildContext context) {
-    return <Widget>[
-      PlatformFlatButton(
-        title: Text("Signout"),
-        onPressed: () => _showSignOutDialog(context),
-      ),
-      PlatformFlatButton(
-        title: Text("Add"),
-        onPressed: () {},
-      )
-    ];
-  }
-
-  Future<void> _showSignOutDialog(BuildContext context) async {
-    await PlatformAlertDialog(
-      title: 'Sign out?',
-      content: 'Are you sure?',
-      defaultActionText: "Logout",
-      actions: _buildActions(context),
-    ).show(context).then((selection) {
-      if (selection) {
-        _signOut(context);
-      }
-    });
-  }
-
-  List<Widget> _buildActions(BuildContext context) {
-    return <Widget>[
-      PlatformAlertDialogAction(
-          child: Text("No"),
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          }),
-      PlatformAlertDialogAction(
-          child: Text('Yes'),
-          onPressed: () {
-            Navigator.of(context).pop(true);
-          })
-    ];
   }
 
   Future<void> _delete(BuildContext context, Job job) async {
