@@ -6,8 +6,10 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class User {
   final String uid;
+  final String photoUrl;
+  final String displayName;
 
-  User({@required this.uid});
+  User({@required this.uid, @required this.photoUrl, @required this.displayName});
 }
 
 abstract class BaseAuth {
@@ -35,7 +37,7 @@ class Auth implements BaseAuth {
     if (firebaseUser == null) {
       return null;
     }
-    return User(uid: firebaseUser.uid);
+    return User(uid: firebaseUser.uid, displayName: firebaseUser.displayName, photoUrl: firebaseUser.photoUrl);
   }
 
   @override
