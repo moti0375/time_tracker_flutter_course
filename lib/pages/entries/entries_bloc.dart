@@ -37,6 +37,9 @@ class EntriesBloc {
       _allEntriesStream.map(_createModels);
 
   static List<EntriesListTileModel> _createModels(List<EntryJob> allEntries) {
+    if(allEntries.isEmpty){
+      return [];
+    }
     print("_createModels: ");
     final allDailyJobsDetails = DailyJobsDetails.all(allEntries);
 
