@@ -118,8 +118,7 @@ class EditJobPageState extends State<EditJobPage> {
           PlatformAlertDialog(
             title: "Name already used",
             content: "Please choose a different name",
-            defaultActionText: "OK",
-            actions: _buildActions(),
+            positiveActionText: "OK",
           ).show(context);
         } else {
           final id = widget.job?.id ?? _docIdFromDateTime();

@@ -7,29 +7,32 @@ import 'package:flutter/material.dart';
 class PlatformAlertDialog extends PlatformWidget {
   final String title;
   final String content;
-  final String defaultActionText;
-  final List<Widget> actions;
+  final String positiveActionText;
+  final String negativeActionText;
+  final VoidCallback onPositive;
+  final VoidCallback onNegative;
 
-  PlatformAlertDialog({@required this.title,
+  PlatformAlertDialog({
+    @required this.title,
     @required this.content,
-    @required this.defaultActionText,
-    @required this.actions})
-      : assert(title != null),
-        assert(content != null),
-        assert(defaultActionText != null),
-        assert(actions != null) ;
+    this.positiveActionText = "OK",
+    this.negativeActionText,
+    @required this.onPositive,
+    this.onNegative,
+  })  : assert(title != null),
+        assert(content != null);
 
   Future<bool> show(BuildContext context) async {
     return Platform.isIOS
         ? await showCupertinoDialog<bool>(
-      context: context,
-      builder: (context) => this,
-    )
+            context: context,
+            builder: (context) => this,
+          )
         : await showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => this,
-    );
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => this,
+          );
   }
 
   @override
@@ -37,7 +40,9 @@ class PlatformAlertDialog extends PlatformWidget {
     return CupertinoAlertDialog(
       title: Text(title),
       content: Text(content),
-      actions: actions.isEmpty ? _setDefaultAction(context): actions,
+      actions: negativeActionText.isEmpty
+          ? _setDefaultAction(context)
+          : _buildActions(context),
     );
   }
 
@@ -46,18 +51,42 @@ class PlatformAlertDialog extends PlatformWidget {
     return AlertDialog(
       title: Text(title),
       content: Text(content),
-      actions: actions.isEmpty ? _setDefaultAction(context): actions,
+      actions: negativeActionText.isEmpty
+          ? _setDefaultAction(context)
+          : _buildActions(context),
     );
   }
 
   List<Widget> _setDefaultAction(BuildContext context) {
     return [
       PlatformAlertDialogAction(
-        child: Text(defaultActionText),
+        child: Text(positiveActionText),
         onPressed: () {
+          onPositive();
           Navigator.of(context).pop();
         },
       )
+    ];
+  }
+
+  List<Widget> _buildActions(BuildContext context) {
+    return [
+      PlatformAlertDialogAction(
+        child: Text(negativeActionText),
+        onPressed: () {
+          Navigator.of(context).pop();
+          if (onNegative != null) {
+            onNegative();
+          }
+        },
+      ),
+      PlatformAlertDialogAction(
+        child: Text(positiveActionText),
+        onPressed: () {
+          Navigator.of(context).pop();
+          onPositive();
+        },
+      ),
     ];
   }
 }

@@ -48,8 +48,7 @@ class JobsPage extends StatelessWidget {
       PlatformAlertDialog(
         title: "there was an error",
         content: e.message,
-        defaultActionText: "OK",
-        actions: [],
+        positiveActionText: "OK"
       ).show(context);
     }
   }
