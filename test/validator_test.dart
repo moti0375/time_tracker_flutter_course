@@ -5,5 +5,7 @@ void main(){
   test("None Empty String Test", (){
     final validator = NonEmptyStringValidator();
     expect(validator.isValid('test'), true);
+
+    expect(validator.isValid(""), false);
   });
 }
