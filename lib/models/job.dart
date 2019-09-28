@@ -19,4 +19,21 @@ class Job{
   Map<String, dynamic> toMap(){
     return {'name': name, 'ratePerHour' : ratePerHour};
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Job &&
+              runtimeType == other.runtimeType &&
+              name == other.name &&
+              ratePerHour == other.ratePerHour &&
+              id == other.id;
+
+  @override
+  int get hashCode =>
+      name.hashCode ^
+      ratePerHour.hashCode ^
+      id.hashCode;
+
+
 }
