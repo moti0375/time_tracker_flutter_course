@@ -13,6 +13,8 @@ class Job{
     String name = map['name'];
     int ratePerHour = map['ratePerHour'];
 
+    if(name == null || name.isEmpty || ratePerHour == null) return null;
+
     return Job(name: name, ratePerHour: ratePerHour, id: id);
   }
 
@@ -34,6 +36,11 @@ class Job{
       name.hashCode ^
       ratePerHour.hashCode ^
       id.hashCode;
+
+  @override
+  String toString() {
+    return 'Job{name: $name, ratePerHour: $ratePerHour, id: $id}';
+  }
 
 
 }

@@ -23,11 +23,22 @@ void main(){
 
       expect(jobFromMap, Job(name: name, id: id, ratePerHour: rate));
     });
+
+    test('Missing values', (){
+      final name = "Development";
+      final rate = 80;
+      final id = '100';
+      final noNameMap =  <String, dynamic>{'ratePerHour': rate};
+      final noRateMap =  <String, dynamic>{'name': name};
+      final noNameFromMap = Job.fromMap(noNameMap, id);
+      final noRateFromMap = Job.fromMap(noRateMap, id);
+
+      expect(noNameFromMap, null);
+      expect(noRateFromMap, null);
+    });
   });
 
   group("ToMap", (){
-
-
     test('Null Data', (){
       final name = "Training";
       final rate = 45;
