@@ -11,7 +11,7 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
     @required String title,
     @required PlatformException exception,
     @required List<Widget> actions,
-  }) : super(title: title, content: _message(exception), positiveActionText: "OK", actions: actions);
+  }) : super(title: title, content: _message(exception), positiveActionText: "OK", onPositive: (){});
 
   static String _message(PlatformException exception){
     if(exception.message.contains("PERMISSION_DENIED") || exception.message.contains("FIRFirestoreErrorDomain")){
