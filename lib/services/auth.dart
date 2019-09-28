@@ -53,8 +53,8 @@ class Auth implements BaseAuth {
 
   @override
   Future<User> singInAnonymously() async {
-    FirebaseUser user = await _firebaseAuth.signInAnonymously();
-    return _userFromFirebase(user);
+    AuthResult result = await _firebaseAuth.signInAnonymously();
+    return _userFromFirebase(result.user);
   }
 
   @override
@@ -75,11 +75,11 @@ class Auth implements BaseAuth {
       GoogleSignInAuthentication authentication = await account.authentication;
       if (authentication.idToken != null &&
           authentication.accessToken != null) {
-        FirebaseUser user = await _firebaseAuth.signInWithCredential(
+        AuthResult result = await _firebaseAuth.signInWithCredential(
             GoogleAuthProvider.getCredential(
                 idToken: authentication.idToken,
                 accessToken: authentication.accessToken));
-        return _userFromFirebase(user);
+        return _userFromFirebase(result.user);
       }
       throw PlatformException(
         code: "MISSING_GOOGLE_AUTH_TOKEN",
@@ -99,10 +99,10 @@ class Auth implements BaseAuth {
     FacebookLoginResult result =
         await facebookLogin.logInWithReadPermissions(['public_profile']);
     if (result.accessToken != null) {
-      FirebaseUser user = await _firebaseAuth.signInWithCredential(
+      AuthResult authResult = await _firebaseAuth.signInWithCredential(
           FacebookAuthProvider.getCredential(
               accessToken: result.accessToken.token));
-      return _userFromFirebase(user);
+      return _userFromFirebase(authResult.user);
     } else {
       throw PlatformException(code: "FACEBOOK_TOKEN_ERROR", message: "Facebook access token error");
     }
@@ -110,15 +110,15 @@ class Auth implements BaseAuth {
 
   @override
   Future<User> createAccount(String email, String password) async {
-    FirebaseUser firebaseUser = await FirebaseAuth.instance
+    AuthResult result = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
-    return _userFromFirebase(firebaseUser);
+    return _userFromFirebase(result.user);
   }
 
   @override
   Future<User> signInWithEmailAndPassword(String email, String password) async {
-    FirebaseUser firebaseUser = await FirebaseAuth.instance
+    AuthResult result = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
-    return _userFromFirebase(firebaseUser);
+    return _userFromFirebase(result.user);
   }
 }
