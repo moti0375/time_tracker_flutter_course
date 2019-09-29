@@ -7,7 +7,14 @@ void main() {
     await tester.pumpWidget(MaterialApp(
       home: CustomRaisedButton(
         color: Colors.teal[700],
+        child: Text("Tap me"),
       ),
     ));
+
+    final button = find.byType(RaisedButton);
+
+    expect(button, findsOneWidget);
+    expect(find.byType(FlatButton), findsNothing);
+    expect(find.text("Tap me"), findsOneWidget);
   });
 }
