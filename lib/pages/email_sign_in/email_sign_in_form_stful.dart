@@ -145,6 +145,7 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
       ),
       SizedBox(height: 8),
       FlatButton(
+        key: Key("formMode"),
         child: Text(_secondaryText),
         onPressed: _loggingIn ? null : _toggleFormType,
       )
