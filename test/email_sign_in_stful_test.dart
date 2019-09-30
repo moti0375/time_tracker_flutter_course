@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,8 @@ void main() {
     mockAuth = MockAuth();
   });
 
-  Future<void> pumpEmailSignInForm(
-      WidgetTester tester, {VoidCallback onSignIn}) async {
+  Future<void> pumpEmailSignInForm(WidgetTester tester,
+      {VoidCallback onSignIn}) async {
     await tester.pumpWidget(
       Provider<BaseAuth>(
         builder: (_) => mockAuth,
@@ -27,6 +28,23 @@ void main() {
           ),
         ),
       ),
+    );
+  }
+
+  void stubSignInWithEmailPasswordSucceed() {
+    when(mockAuth.signInWithEmailAndPassword(any, any)).thenAnswer(
+      (_) => Future<User>.value(
+        User(
+          uid: 'abc',
+          displayName: "Mark",
+        ),
+      ),
+    );
+  }
+
+  void stubSignInWithEmailPasswordException() {
+    when(mockAuth.signInWithEmailAndPassword(any, any)).thenThrow(
+      PlatformException(code: "ERROR_WRONG_PASSWORD", message: "", details: ""),
     );
   }
 
@@ -49,6 +67,8 @@ void main() {
       var singedIn = false;
       await pumpEmailSignInForm(tester, onSignIn: () => singedIn = true);
 
+      stubSignInWithEmailPasswordSucceed();
+
       final emailInputField = find.byKey(Key('email'));
       expect(emailInputField, findsOneWidget);
       await tester.enterText(emailInputField, email);
@@ -64,6 +84,32 @@ void main() {
 
       verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
       expect(singedIn, true);
+    });
+
+    testWidgets('User enters invalid passwrod', (WidgetTester tester) async {
+      const email = 'moti@gmail.com';
+      const password = 'password';
+
+      var singedIn = false;
+      await pumpEmailSignInForm(tester, onSignIn: () => singedIn = true);
+
+      stubSignInWithEmailPasswordException();
+
+      final emailInputField = find.byKey(Key('email'));
+      expect(emailInputField, findsOneWidget);
+      await tester.enterText(emailInputField, email);
+
+      final passwordInputField = find.byKey(Key('password'));
+      expect(passwordInputField, findsOneWidget);
+      await tester.enterText(passwordInputField, password);
+
+      await tester.pump();
+
+      final singInButton = find.text('Sign In');
+      await tester.tap(singInButton);
+
+      verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
+      expect(singedIn, false);
     });
   });
 

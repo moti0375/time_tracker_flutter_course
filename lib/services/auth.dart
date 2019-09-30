@@ -9,7 +9,7 @@ class User {
   final String photoUrl;
   final String displayName;
 
-  User({@required this.uid, @required this.photoUrl, @required this.displayName});
+  User({@required this.uid, this.photoUrl, @required this.displayName});
 }
 
 abstract class BaseAuth {
