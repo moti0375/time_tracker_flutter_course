@@ -20,8 +20,10 @@ import 'package:time_tracker_flutter_course/utils/validators.dart';
 class EmailSignInFormStful extends StatefulWidget
     with EmailAndPasswordValidators {
 
+  final VoidCallback onSignIn;
+
   final EmailSignInBloc emailSignInBloc;
-  EmailSignInFormStful({@required this.emailSignInBloc});
+  EmailSignInFormStful({@required this.emailSignInBloc, this.onSignIn});
 
   static Widget create(BuildContext context) {
     final BaseAuth auth = Provider.of<BaseAuth>(context);
@@ -73,7 +75,10 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
       } else {
         await auth.createAccount(_email, _password);
       }
-      Navigator.of(context).pop();
+
+      if(widget.onSignIn != null){
+        widget.onSignIn();
+      }
     } on PlatformException catch (e) {
       print("There was an error: ${e.toString()}");
       PlatformExceptionAlertDialog platformAlertDialog =

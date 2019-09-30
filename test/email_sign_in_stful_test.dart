@@ -14,13 +14,16 @@ void main() {
     mockAuth = MockAuth();
   });
 
-  Future<void> pumpEmailSignInForm(WidgetTester tester) async {
+  Future<void> pumpEmailSignInForm(
+      WidgetTester tester, {VoidCallback onSignIn}) async {
     await tester.pumpWidget(
       Provider<BaseAuth>(
         builder: (_) => mockAuth,
         child: MaterialApp(
           home: Scaffold(
-            body: EmailSignInFormStful(),
+            body: EmailSignInFormStful(
+              onSignIn: onSignIn,
+            ),
           ),
         ),
       ),
@@ -30,18 +33,21 @@ void main() {
   group('sign in', () {
     testWidgets('Click sign in when no email and passwrod',
         (WidgetTester tester) async {
-      await pumpEmailSignInForm(tester);
+      var signedIn = false;
+      await pumpEmailSignInForm(tester, onSignIn: () => signedIn = true);
       final signInButton = find.text('Sign In');
       await tester.tap(signInButton);
 
       verifyNever(mockAuth.signInWithEmailAndPassword(any, any));
+      expect(signedIn, false);
     });
 
     testWidgets('User enters email and passwrod', (WidgetTester tester) async {
       const email = 'moti@gmail.com';
       const password = 'password';
 
-      await pumpEmailSignInForm(tester);
+      var singedIn = false;
+      await pumpEmailSignInForm(tester, onSignIn: () => singedIn = true);
 
       final emailInputField = find.byKey(Key('email'));
       expect(emailInputField, findsOneWidget);
@@ -57,28 +63,26 @@ void main() {
       await tester.tap(singInButton);
 
       verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
-
+      expect(singedIn, true);
     });
   });
 
   group('Register', () {
-    testWidgets('Set register mode',
-            (WidgetTester tester) async {
-          await pumpEmailSignInForm(tester);
-          final modeButton = find.byKey(Key("formMode"));
-          await tester.tap(modeButton);
+    testWidgets('Set register mode', (WidgetTester tester) async {
+      await pumpEmailSignInForm(tester);
+      final modeButton = find.byKey(Key("formMode"));
+      await tester.tap(modeButton);
 
-          await tester.pump();
+      await tester.pump();
 
-          final registerButton = find.text('Create an account');
-          expect(registerButton, findsOneWidget);
+      final registerButton = find.text('Create an account');
+      expect(registerButton, findsOneWidget);
 //          await tester.tap(registerButton);
 
 //          verifyNever(mockAuth.createAccount(any, any));
-        });
+    });
 
     testWidgets('User create account', (WidgetTester tester) async {
-
       const email = 'moti@gmail.com';
       const password = 'password';
 
@@ -86,7 +90,6 @@ void main() {
       final modeButton = find.byKey(Key("formMode"));
       await tester.tap(modeButton);
       await tester.pump();
-
 
       final emailInputField = find.byKey(Key('email'));
       expect(emailInputField, findsOneWidget);
@@ -102,7 +105,6 @@ void main() {
       await tester.tap(registerButton);
 
       verify(mockAuth.createAccount(email, password)).called(1);
-
     });
   });
 }
