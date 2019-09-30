@@ -155,6 +155,7 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
     bool _showErrorText =
         _submitted && !widget.passwordValidator.isValid(_password);
     return TextField(
+      key: Key('password'),
       focusNode: _passwordFocusNode,
       controller: _passwordController,
       obscureText: true,
@@ -172,6 +173,7 @@ class _EmailSignInFormStfulState extends State<EmailSignInFormStful> {
   TextField _buildEmailInputField() {
     bool showErrorText = _submitted && !widget.emailValidator.isValid(_email);
     return TextField(
+      key: Key('email'),
       focusNode: _emailFocusNode,
       controller: _emailController,
       decoration: InputDecoration(
