@@ -12,14 +12,17 @@ import 'package:time_tracker_flutter_course/pages/sign_in_page/sign_in_page.dart
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 import 'email_sign_in_stful_test.dart';
+import 'mocks.dart';
 
 void main() {
   MockAuth mockAuth;
+  MockNavigatorObserver mockNavigatorObserver;
   StreamController<User> onUserChangedController;
 
   setUp(() {
     mockAuth = MockAuth();
     onUserChangedController = StreamController<User>();
+    mockNavigatorObserver = MockNavigatorObserver();
   });
 
   tearDownAll((){
@@ -34,6 +37,7 @@ void main() {
           home: Scaffold(
             body: LandingPage(),
           ),
+          navigatorObservers: [mockNavigatorObserver],
         ),
       ),
     );

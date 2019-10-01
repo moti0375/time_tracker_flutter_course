@@ -119,6 +119,7 @@ class SignInPage extends StatelessWidget {
           ),
           Container(
             child: SocialSignInButton(
+              key: Key("SocialSignInButton"),
               text: "Sign in with Facebook",
               textColor: Colors.white,
               color: Color(0xFF334D92),
@@ -130,6 +131,7 @@ class SignInPage extends StatelessWidget {
             height: 8,
           ),
           SignInButton(
+            key: Key("EmailSignInButton"),
             text: "Sign in with email",
             textColor: Colors.white,
             color: Colors.teal[700],
@@ -147,6 +149,7 @@ class SignInPage extends StatelessWidget {
             height: 8,
           ),
           SignInButton(
+            key: Key("AnonymouesSignButton"),
             text: "Go Anonymoues",
             textColor: Colors.black,
             color: Colors.lime[300],

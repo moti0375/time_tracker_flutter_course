@@ -6,13 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/pages/email_sign_in/email_sign_in_form_stful.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
-class MockAuth extends Mock implements BaseAuth {}
+import 'mocks.dart';
 
 void main() {
   MockAuth mockAuth;
+  MockNavigatorObserver mockNavigatorObserver;
 
   setUp(() {
     mockAuth = MockAuth();
+    mockNavigatorObserver = MockNavigatorObserver();
   });
 
   Future<void> pumpEmailSignInForm(WidgetTester tester,
@@ -84,6 +86,8 @@ void main() {
 
       verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
       expect(singedIn, true);
+
+      verify(mockNavigatorObserver.didPush(any, any)).called(1);
     });
 
     testWidgets('User enters invalid passwrod', (WidgetTester tester) async {
